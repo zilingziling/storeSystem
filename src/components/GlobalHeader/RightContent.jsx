@@ -35,8 +35,8 @@ const GlobalHeaderRight = props => {
       <h1 className={styles.bread}>{getPage()}</h1>
       <div className={styles.user}>
         <img alt="avatar" src={require('@/assets/1024.jpg')} />
-        <span>之林</span>
-        <img alt="level" src={require('@/assets/v3.png')} />
+        <span>admin</span>
+        {/*<img alt="level" src={require('@/assets/v3.png')} />*/}
       </div>
     </div>
   );

@@ -36,16 +36,16 @@ const errorHandler = error => {
       data = parseData(data)
       if (data) {
         // 验证是否是错误的结果
-        if (!data.result) {
+        if (data.code !== 0) {
           // 提示一个错误信息
           notification.error({
-            message: (data.message || '网络异常').split('\n').shift(),
+            message: (data.msg || '网络异常').split('\n').shift(),
           });
 
           // 处理登录失效的问题
-          if (data.status === 'UNAUTHORIZED') {
+          if (data.code === 50000) {
             // 登录失效
-            window.localStorage.removeItem('access_token')
+            window.localStorage.removeItem('token')
           }
         }
       } else {
@@ -75,13 +75,7 @@ const parseData = data => data && JSON.parse(data)
 /**
  * 获取access_token
  */
-const getAccessToken = () => {
-  const token = getUrlParams('access_token')
-  if (token) {
-    window.localStorage.setItem('access_token', token)
-  }
-  return window.localStorage.getItem('access_token')
-}
+const getAccessToken = () => window.localStorage.getItem('token')
 
 /**
  * 配置request请求时的默认参数
@@ -92,7 +86,7 @@ const request = extend({
   credentials: 'include', // 默认请求是否带上cookie
   headers: {
     // access_token: '62011148de39923c9bb5cdfh7a7b85f99848979bffe74d82669679539',
-    access_token: getAccessToken(),
+    token: getAccessToken(),
 
   },
 });

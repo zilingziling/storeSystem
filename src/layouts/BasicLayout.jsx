@@ -61,7 +61,6 @@ const BasicLayout = props => {
    * init variables
    */
 
-  const [token, setToken] = useState('')
 
  useEffect(() => {
  }, [])
@@ -96,7 +95,6 @@ const BasicLayout = props => {
       {...settings}
     >
         {children}
-       {/*{window.localStorage.getItem('access_token') ? children : noMatch}*/}
     </ProLayout>
   );
 };

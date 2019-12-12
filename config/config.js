@@ -76,55 +76,65 @@ export default {
   devtool: isAntDesignProPreview ? 'source-map' : false,
   // umi routes: https://umijs.org/zh/guide/router.html
   routes: [
+    {
+      path: '/user',
+      routes: [
+        {
+          name: 'login',
+          path: '/user/login',
+          component: './user/login',
+        },
+      ],
+    },
+    {
+      path: '/',
+      component: '../layouts/BasicLayout',
+      routes: [
         {
           path: '/',
-          component: '../layouts/BasicLayout',
-          routes: [
-            {
-              path: '/',
-              redirect: '/dashboard',
-            },
-            {
-              path: '/dashboard',
-              name: 'dashboard',
-              icon: 'dashboard',
-              component: './dashboard/dashboard',
-            },
-            {
-              path: '/goodsInfo',
-              name: 'goodsInfo',
-              icon: 'gift',
-              component: './goodsInfo/goodsInfo',
-            },
-            {
-              path: '/userInfo',
-              name: 'userInfo',
-              icon: 'user',
-              component: './userInfo/userInfo',
-            },
-            {
-              path: '/storeData',
-              name: 'storeData',
-              icon: 'shop',
-              component: './storeData/storeData',
-            },
-            {
-              path: '/pushMessage',
-              name: 'pushMessage',
-              icon: 'message',
-              component: './pushMessage/pushMessage',
-            },
-            {
-              path: '/storeApply',
-              name: 'storeApply',
-              icon: 'form',
-              component: './storeApply/storeApply',
-            },
-            {
-              component: './404',
-            },
-          ],
+          redirect: '/dashboard',
         },
+        {
+          path: '/dashboard',
+          name: 'dashboard',
+          icon: 'dashboard',
+          component: './dashboard/dashboard',
+        },
+        {
+          path: '/goodsInfo',
+          name: 'goodsInfo',
+          icon: 'gift',
+          component: './goodsInfo/goodsInfo',
+        },
+        {
+          path: '/userInfo',
+          name: 'userInfo',
+          icon: 'user',
+          component: './userInfo/userInfo',
+        },
+        {
+          path: '/storeData',
+          name: 'storeData',
+          icon: 'shop',
+          component: './storeData/storeData',
+        },
+        {
+          path: '/pushMessage',
+          name: 'pushMessage',
+          icon: 'message',
+          component: './pushMessage/pushMessage',
+        },
+        {
+          path: '/storeApply',
+          name: 'storeApply',
+          icon: 'form',
+          component: './storeApply/storeApply',
+        },
+        {
+          component: './404',
+        },
+      ],
+    },
   ],
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
@@ -170,7 +180,7 @@ export default {
   chainWebpack: webpackPlugin,
   proxy: {
     '/api': {
-      target: 'http://taobao.styleking.cn:30003/',
+      target: 'http://103.60.167.34:8111/',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
