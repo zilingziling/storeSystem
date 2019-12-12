@@ -13,7 +13,7 @@ import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { isAntDesignPro, getAuthorityFromRouter } from '@/utils/utils';
 import logo from '../assets/logo.png';
-
+import router from 'umi/router'
 const noMatch = (
   <Result
     status="403"
@@ -50,11 +50,11 @@ const BasicLayout = props => {
   useEffect(() => {
     if (dispatch) {
       dispatch({
-        type: 'user/fetchCurrent',
-      });
-      dispatch({
         type: 'settings/getSetting',
       });
+    }
+    if(!window.localStorage.getItem("token")){
+      router.push("/user/login")
     }
   }, []);
   /**

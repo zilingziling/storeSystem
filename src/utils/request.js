@@ -41,7 +41,6 @@ const errorHandler = error => {
           notification.error({
             message: (data.msg || '网络异常').split('\n').shift(),
           });
-
           // 处理登录失效的问题
           if (data.code === 50000) {
             // 登录失效
@@ -87,7 +86,7 @@ const request = extend({
   headers: {
     // access_token: '62011148de39923c9bb5cdfh7a7b85f99848979bffe74d82669679539',
     token: getAccessToken(),
-
   },
+  timeout: 10000,
 });
 export default request;
