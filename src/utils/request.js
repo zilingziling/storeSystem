@@ -4,9 +4,10 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
-import { getUrlParams } from '@/utils/methods';
+import { openNotificationWithIcon } from '@/utils/methods';
+import { yellow } from '@ant-design/colors/lib';
 
-const codeMessage = {
+const codeMaps = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
   202: '一个请求已经进入后台排队（异步任务）。',
@@ -27,66 +28,55 @@ const codeMessage = {
  * 异常处理程序
  */
 
-const errorHandler = error => {
-  const { response } = error;
-
-  if (response && response.status) {
-    response.text().then(data => {
-      // 解析返回的文本
-      data = parseData(data)
-      if (data) {
-        // 验证是否是错误的结果
-        if (data.code !== 0) {
-          // 提示一个错误信息
-          notification.error({
-            message: (data.msg || '网络异常').split('\n').shift(),
-          });
-          // 处理登录失效的问题
-          if (data.code === 50000) {
-            // 登录失效
-            window.localStorage.removeItem('token')
-          }
-        }
-      } else {
-        notification.error({
-          description: '您的网络发生异常，无法连接服务器',
-          message: '网络异常',
-        });
-      }
-    })
-  } else if (!response) {
-    notification.error({
-      description: '您的网络发生异常，无法连接服务器',
-      message: '网络异常',
-    });
-  }
-
-  return response;
-};
-
 /**
  * 解析数据
  * @param { String } data
  */
 
-const parseData = data => data && JSON.parse(data)
-
 /**
  * 获取access_token
  */
-const getAccessToken = () => window.localStorage.getItem('token')
+const getAccessToken = () => window.localStorage.getItem('token');
 
 /**
  * 配置request请求时的默认参数
  */
+
 const request = extend({
-  errorHandler,
   // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
-  headers: {
-    // access_token: '62011148de39923c9bb5cdfh7a7b85f99848979bffe74d82669679539',
-    token: getAccessToken(),
-  },
   timeout: 10000,
+});
+request.interceptors.response.use(response => {
+  if (response) {
+    if (response.status === 200) {
+      response
+        .clone()
+        .json()
+        .then(data => {
+          if (data.code !== 0) {
+            if (data.code === 50000) {
+              openNotificationWithIcon('error', data.msg || 'token过期！');
+              window.localStorage.removeItem('token');
+            } else openNotificationWithIcon('error', data.msg || '服务器错误！');
+          }
+        });
+    } else {
+      openNotificationWithIcon('error', codeMaps[response.status] || '网络错误！');
+    }
+  }
+  return response;
+});
+request.interceptors.request.use((url, options) => {
+  let headers = {};
+  if (!url.toLocaleLowerCase().includes('login')) {
+    headers = {
+      token: getAccessToken(),
+    };
+  }
+  return {
+    url,
+    options: { ...options, interceptors: true, headers },
+  };
 });
 export default request;

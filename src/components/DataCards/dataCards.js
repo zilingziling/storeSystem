@@ -1,11 +1,17 @@
 import React from 'react';
-import styles from './cards.less'
+import styles from './cards.less';
 
-const DataCards = ({titie}) => (
+const DataCards = ({ item }) => {
+  console.log(item);
+  return (
     <div className={styles.cardWrapper}>
-      <img/>
-      <h1>{titie}</h1>
+      <img />
+      <div>
+        <h1>{item.title}</h1>
+        <p>{item.value}</p>
+      </div>
     </div>
-  )
+  );
+};
 
-export default DataCards
+export default DataCards;
