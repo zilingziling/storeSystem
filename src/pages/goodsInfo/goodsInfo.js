@@ -1,41 +1,113 @@
-import React, { Component } from 'react';
-import { Button, Input, Table } from 'antd';
+import React, { Component, useEffect, useState } from 'react';
+import { Button, Icon, Input, Table, Switch } from 'antd';
+import { connect } from 'dva';
+import moment from 'moment';
 import styles from '../index.less'
+import { openNotificationWithIcon } from '@/utils/methods';
+import { delGoods, switchHot } from '@/services/common';
 
-const columns = [
-  {
-    title: 'ID',
-  },
-  {
-    title: '图片',
-  },
-  {
-    title: '名称',
-  },
-  {
-    title: '货号',
-  },
-  {
-    title: '颜色',
-  },
-  {
-    title: '发售日期',
-  },
-  {
-    title: '热门',
-  },
-  {
-    title: '操作',
-  },
-]
-const GoodsInfo = () => (
-      <div>
-        <div className={styles.flex}>
-          <Input className={styles.customInput} placeholder="输入货号"/>
-          <Button type="primary">搜索</Button>
-        </div>
-        <Table bordered columns={columns}/>
+
+const GoodsInfo = ({ dispatch, goods: { total, list } }) => {
+  const [current, setCur] = useState(1)
+  const [pageSize, setSize] = useState(10)
+  const [shoeName, setShoeName] = useState('')
+  const columns = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+    },
+    {
+      title: '图片',
+      dataIndex: 'img',
+      render: text => <img src={text} className={styles.goods}/>,
+    },
+    {
+      title: '名称',
+      dataIndex: 'shoeName',
+    },
+    {
+      title: '货号',
+      dataIndex: 'shoeNum',
+    },
+    {
+      title: '颜色',
+      dataIndex: 'color',
+    },
+    {
+      title: '发售日期',
+      dataIndex: 'creatTime',
+      render: text => moment(text).format('YYYY-HH-DD'),
+
+    },
+    {
+      title: '热门',
+      dataIndex: 'shoeHot',
+      render: (text, record) => <Switch onChange={() => hotSwitch(record)} defaultChecked={text === 0 ? false : text === 1 ? true : ''}/>,
+    },
+    {
+      title: '操作',
+      render: (text, record) => <Icon onClick={() => onDelGoods(record.shoeNum)} type="delete" className={styles.icon}/>,
+
+    },
+  ]
+  const init = () => {
+    dispatch({
+      type: 'common/getGoods',
+      p: {
+        pageIndex: current,
+        pageSize,
+        shoeName,
+      },
+    })
+  }
+  const hotSwitch = record => {
+    switchHot({
+      shoeNum: record.shoeNum,
+      hot: record.shoeHot === 0 ? 1 : record.shoeHot === 1 ? 0 : '',
+    }).then(r => {
+      if (r.code === 0) {
+        openNotificationWithIcon('success', r.msg)
+        init()
+      }
+    })
+  }
+
+  const onDelGoods = shoeNum => {
+    delGoods(shoeNum).then(r => {
+      if (r.code === 0) {
+        openNotificationWithIcon('success', r.msg)
+        init()
+      }
+    })
+  }
+  useEffect(() => {
+    init()
+  }, [current, shoeName])
+  const handleTableChange = pagination => {
+    setCur(pagination.current)
+  }
+  const pagination = {
+    total, pageSize, current,
+  }
+  const inputSearch = e => {
+    setShoeName(e.target.value)
+  }
+  const handleSearch = () => {
+    setCur(1)
+  }
+  return (
+    <div>
+      <div className={styles.flex}>
+        <Input value={shoeName} onChange={inputSearch} className={styles.customInput} placeholder="输入货号"/>
+        <Button type="primary" onClick={handleSearch}>搜索</Button>
       </div>
-    )
-
-export default GoodsInfo;
+      <Table
+        pagination={pagination}
+        bordered columns={columns}
+        dataSource={list} rowKey="id" onChange={handleTableChange}/>
+    </div>
+  )
+}
+export default connect(({ common }) => ({
+  goods: common.goods,
+}))(GoodsInfo);

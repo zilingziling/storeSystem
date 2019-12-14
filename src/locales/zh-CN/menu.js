@@ -54,5 +54,5 @@ export default {
   'menu.storeApply': '网页仓库申请',
   'menu.userInfo': '用户信息',
   'menu.pushMessage': '消息推送',
-  'menu.storeData': '网页仓库申请',
+  'menu.storeData': '仓库数据',
 };

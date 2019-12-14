@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './cards.less';
 
 const DataCards = ({ item }) => {
-  console.log(item);
   return (
     <div className={styles.cardWrapper}>
       <img />

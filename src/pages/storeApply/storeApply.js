@@ -1,35 +1,83 @@
-import React, { Component } from 'react';
-import { Button, Input, Table } from 'antd';
+import React, { Component, useEffect, useState } from 'react';
+import { Button, Input, Table, Switch, Divider } from 'antd';
+import { connect } from 'dva';
 import styles from '../index.less'
+import { openNotificationWithIcon } from '@/utils/methods';
+import {openStore} from "@/services/common";
 
-const columns = [
-  {
-    title: 'ID',
-  },
-  {
-    title: '申请用户',
-  },
-  {
-    title: '手机号',
-  },
-  {
-    title: 'QQ号',
-  },
-  {
-    title: '微信号',
-  },
-  {
-    title: '开通',
-  },
-]
-const StoreApply = () => (
-  <div>
-    <div className={styles.flex}>
-      <Input className={styles.customInput} placeholder="输入货号"/>
-      <Button type="primary">搜索</Button>
+
+const StoreApply = ({ dispatch, storeApply: { total, list } }) => {
+  const [current, setCur] = useState(1)
+  const [pageSize, setSize] = useState(10)
+  const columns = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+    },
+    {
+      title: '申请用户',
+      dataIndex: 'userName',
+    },
+    {
+      title: '手机号',
+      dataIndex: 'phoneNum',
+    },
+    {
+      title: 'QQ号',
+      dataIndex: 'qq',
+      render: text => text || '暂无',
+    },
+    {
+      title: '微信号',
+      dataIndex: 'wxNum',
+    },
+    {
+      title: '开通',
+      render: text => <><a onClick={() => openSwitch(1)}>开通</a><Divider type="vertical"/><a onClick={() => openSwitch(0)}>拒绝</a></>,
+    },
+  ]
+  const init = () => {
+    dispatch({
+      type: 'common/getStoreApply',
+      p: {
+        pageIndex: current,
+        pageSize,
+      },
+    })
+  }
+  const openSwitch = mark => {
+    openStore({
+      userId: mark,
+    }).then(r => {
+      if (r.code === 0) {
+        openNotificationWithIcon('success', r.msg)
+        init()
+      }
+    })
+  }
+
+
+  useEffect(() => {
+    init()
+  }, [current])
+  const handleTableChange = pagination => {
+    setCur(pagination.current)
+  }
+  const pagination = {
+    total, pageSize, current,
+  }
+  return (
+    <div>
+      {/*<div className={styles.flex}>*/}
+      {/*  <Input className={styles.customInput} placeholder="输入货号"/>*/}
+      {/*  <Button type="primary">搜索</Button>*/}
+      {/*</div>*/}
+      <Table pagination={pagination}
+             bordered columns={columns}
+             dataSource={list} rowKey="id" onChange={handleTableChange}/>
     </div>
-    <Table bordered columns={columns}/>
-  </div>
-)
-
-export default StoreApply;
+  )
+}
+export default connect(({ common }) => ({
+  storeApply: common.storeApply,
+}))(StoreApply);
