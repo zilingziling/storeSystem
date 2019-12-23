@@ -70,12 +70,12 @@ const StoreData = ({ dispatch, storeData: { total, list } }) => {
 
   return (
     <div>
-      {/* <div className={styles.flex}> */}
-      {/*  <Input className={styles.customInput} placeholder="输入货号"/> */}
-      {/*  <Button type="primary">搜索</Button> */}
-      {/* </div> */}
+       <div className={styles.flex}>
+        <Input className={styles.customInput} placeholder="输入货号"/>
+        <Button type="primary">搜索</Button>
+       </div>
       <Modal width={1000} footer={null} title={null} visible={visible} onCancel={() => setV(false)}>
-        <Table  columns={modalColumn} rowKey="id" dataSource={modalData}/>
+        <Table columns={modalColumn} rowKey="id" dataSource={modalData}/>
       </Modal>
       <Table
         pagination={pagination}
@@ -112,6 +112,6 @@ const modalColumn = [
   {
     title: '入库价格',
     dataIndex: 'inPrice',
-    render:text=>text/100
+    render: text => text / 100,
   },
 ]

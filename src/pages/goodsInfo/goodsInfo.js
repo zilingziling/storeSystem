@@ -31,7 +31,7 @@ const GoodsInfo = ({ dispatch, goods: { total, list } }) => {
     },
     {
       title: '颜色',
-      dataIndex: 'color',
+      dataIndex: 'corlor',
     },
     {
       title: '发售日期',

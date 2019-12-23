@@ -10,6 +10,7 @@ import { delUser } from '@/services/common';
 const UserInfo = ({ dispatch, user: { total, list } }) => {
   const [current, setCur] = useState(1)
   const [pageSize, setSize] = useState(10)
+  const [userName, setUserName] = useState('')
   const columns = [
     {
       title: 'ID',
@@ -22,6 +23,10 @@ const UserInfo = ({ dispatch, user: { total, list } }) => {
     {
       title: '手机号',
       dataIndex: 'phoneNum',
+    },
+    {
+      title: '微信号',
+      dataIndex: 'wxNum',
     },
     {
       title: '头像',
@@ -59,7 +64,7 @@ const UserInfo = ({ dispatch, user: { total, list } }) => {
   }
   useEffect(() => {
     init()
-  }, [current])
+  }, [current,userName])
   const handleTableChange = pagination => {
     setCur(pagination.current)
   }
@@ -74,12 +79,18 @@ const UserInfo = ({ dispatch, user: { total, list } }) => {
   const pagination = {
     total, pageSize, current,
   }
+  const inputSearch = e => {
+    setUserName(e.target.value)
+  }
+  const handleSearch = () => {
+    setCur(1)
+  }
   return (
     <div>
-      {/*<div className={styles.flex}>*/}
-      {/*  <Input className={styles.customInput} placeholder="输入货号"/>*/}
-      {/*  <Button type="primary">搜索</Button>*/}
-      {/*</div>*/}
+      <div className={styles.flex}>
+        <Input value={userName} className={styles.customInput} onChange={inputSearch} placeholder="输入手机号/用户名"/>
+        <Button type="primary" onClick={handleSearch}>搜索</Button>
+      </div>
       <Table
         pagination={pagination}
         bordered columns={columns}
