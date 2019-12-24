@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Table, Icon } from 'antd';
 import { connect } from 'dva';
-import moment from 'moment';
 import styles from '../index.less'
 import { openNotificationWithIcon } from '@/utils/methods';
 import { delUser } from '@/services/common';
@@ -36,12 +35,10 @@ const UserInfo = ({ dispatch, user: { total, list } }) => {
     {
       title: '登录时间',
       dataIndex: 'loginTime',
-      render: text => moment(text).format('YYYY-HH-DD'),
     },
     {
       title: '注册时间',
       dataIndex: 'createTime',
-      render: text => moment(text).format('YYYY-HH-DD'),
     },
     {
       title: '网页仓库开通',

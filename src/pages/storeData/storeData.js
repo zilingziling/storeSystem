@@ -43,7 +43,7 @@ const StoreData = ({ dispatch, storeData: { total, list } }) => {
       p: {
         pageIndex: current,
         pageSize,
-        shoeNum
+        shoeNum,
       },
     })
   }
@@ -81,7 +81,7 @@ const StoreData = ({ dispatch, storeData: { total, list } }) => {
         <Input value={shoeNum} className={styles.customInput} onChange={inputSearch} placeholder="输入货号"/>
         <Button type="primary" onClick={handleSearch}>搜索</Button>
        </div>
-      <Modal width={1000} footer={null} title={null} visible={visible} onCancel={() => setV(false)}>
+      <Modal width={1200} footer={null} title={null} visible={visible} onCancel={() => setV(false)}>
         <Table columns={modalColumn} rowKey="id" dataSource={modalData}/>
       </Modal>
       <Table

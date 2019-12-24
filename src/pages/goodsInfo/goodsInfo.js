@@ -1,7 +1,6 @@
 import React, { Component, useEffect, useState } from 'react';
 import { Button, Icon, Input, Table, Switch } from 'antd';
 import { connect } from 'dva';
-import moment from 'moment';
 import styles from '../index.less'
 import { openNotificationWithIcon } from '@/utils/methods';
 import { delGoods, switchHot } from '@/services/common';
@@ -36,7 +35,6 @@ const GoodsInfo = ({ dispatch, goods: { total, list } }) => {
     {
       title: '发售日期',
       dataIndex: 'creatTime',
-      render: text => moment(text).format('YYYY-HH-DD'),
 
     },
     {

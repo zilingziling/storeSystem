@@ -3,7 +3,7 @@ import { Button, Input, Table, Switch, Divider } from 'antd';
 import { connect } from 'dva';
 import styles from '../index.less'
 import { openNotificationWithIcon } from '@/utils/methods';
-import {openStore} from "@/services/common";
+import { openStore } from '@/services/common';
 
 
 const StoreApply = ({ dispatch, storeApply: { total, list } }) => {
@@ -33,7 +33,7 @@ const StoreApply = ({ dispatch, storeApply: { total, list } }) => {
     },
     {
       title: '开通',
-      render: text => <><a onClick={() => openSwitch(1)}>开通</a><Divider type="vertical"/><a onClick={() => openSwitch(0)}>拒绝</a></>,
+      render: (text, record) => <><a onClick={() => openSwitch(record.id, 1)}>开通</a><Divider type="vertical"/><a onClick={() => openSwitch(record.id, 0)}>拒绝</a></>,
     },
   ]
   const init = () => {
@@ -45,9 +45,10 @@ const StoreApply = ({ dispatch, storeApply: { total, list } }) => {
       },
     })
   }
-  const openSwitch = mark => {
+  const openSwitch = (id,mark) => {
     openStore({
-      userId: mark,
+      userId: id,
+      check: mark,
     }).then(r => {
       if (r.code === 0) {
         openNotificationWithIcon('success', r.msg)
@@ -68,10 +69,10 @@ const StoreApply = ({ dispatch, storeApply: { total, list } }) => {
   }
   return (
     <div>
-      {/*<div className={styles.flex}>*/}
-      {/*  <Input className={styles.customInput} placeholder="输入货号"/>*/}
-      {/*  <Button type="primary">搜索</Button>*/}
-      {/*</div>*/}
+      {/* <div className={styles.flex}> */}
+      {/*  <Input className={styles.customInput} placeholder="输入货号"/> */}
+      {/*  <Button type="primary">搜索</Button> */}
+      {/* </div> */}
       <Table pagination={pagination}
              bordered columns={columns}
              dataSource={list} rowKey="id" onChange={handleTableChange}/>
