@@ -31,7 +31,7 @@ const UserInfo = ({ dispatch, user: { total, list } }) => {
     {
       title: '头像',
       dataIndex: 'img',
-      render: text => <img src={text} className={styles.header}/>,
+      render: text => (text ? <img src={text} className={styles.header}/> : '暂无'),
     },
     {
       title: '登录时间',
@@ -59,12 +59,13 @@ const UserInfo = ({ dispatch, user: { total, list } }) => {
       p: {
         pageIndex: current,
         pageSize,
+        name: userName,
       },
     })
   }
   useEffect(() => {
     init()
-  }, [current,userName])
+  }, [current, userName])
   const handleTableChange = pagination => {
     setCur(pagination.current)
   }

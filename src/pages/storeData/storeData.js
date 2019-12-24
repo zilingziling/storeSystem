@@ -10,6 +10,7 @@ const StoreData = ({ dispatch, storeData: { total, list } }) => {
   const [pageSize, setSize] = useState(10)
   const [visible, setV] = useState(false)
   const [modalData, setModal] = useState([])
+  const [shoeNum, setShoeNum] = useState('')
   const columns = [
     {
       title: 'ID',
@@ -42,6 +43,7 @@ const StoreData = ({ dispatch, storeData: { total, list } }) => {
       p: {
         pageIndex: current,
         pageSize,
+        shoeNum
       },
     })
   }
@@ -59,7 +61,7 @@ const StoreData = ({ dispatch, storeData: { total, list } }) => {
   }
   useEffect(() => {
     init()
-  }, [current])
+  }, [current, shoeNum])
 
   const handleTableChange = pagination => {
     setCur(pagination.current)
@@ -67,12 +69,17 @@ const StoreData = ({ dispatch, storeData: { total, list } }) => {
   const pagination = {
     total, pageSize, current,
   }
-
+  const inputSearch = e => {
+    setShoeNum(e.target.value)
+  }
+  const handleSearch = () => {
+    setCur(1)
+  }
   return (
     <div>
        <div className={styles.flex}>
-        <Input className={styles.customInput} placeholder="输入货号"/>
-        <Button type="primary">搜索</Button>
+        <Input value={shoeNum} className={styles.customInput} onChange={inputSearch} placeholder="输入货号"/>
+        <Button type="primary" onClick={handleSearch}>搜索</Button>
        </div>
       <Modal width={1000} footer={null} title={null} visible={visible} onCancel={() => setV(false)}>
         <Table columns={modalColumn} rowKey="id" dataSource={modalData}/>
