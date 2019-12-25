@@ -26,11 +26,11 @@ const StoreData = ({ dispatch, storeData: { total, list } }) => {
     },
     {
       title: '商品数',
-      dataIndex: 'shoeCount',
+      dataIndex: 'resultNum',
     },
     {
       title: '库存数',
-      dataIndex: 'resultNum',
+      dataIndex: 'shoeCount',
     },
     {
       title: '查询',
