@@ -53,6 +53,7 @@ const StoreData = ({ dispatch, storeData: { total, list } }) => {
       pageSize: 1000000,
       pageIndex: 1,
       userId,
+      shoeNum,
     }).then(r => {
       if (r.code === 0) {
         setModal(r.data.list)

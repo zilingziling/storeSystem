@@ -34,7 +34,7 @@ const GoodsInfo = ({ dispatch, goods: { total, list } }) => {
     },
     {
       title: '发售日期',
-      dataIndex: 'creatTime',
+      dataIndex: 'sellDate',
 
     },
     {
