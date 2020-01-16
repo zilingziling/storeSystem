@@ -6,7 +6,7 @@ import { getModal } from '@/services/common';
 
 
 const StoreData = ({ dispatch, storeData: { total, list } }) => {
-  const [current, setCur] = useState(1)
+  const [current, setCur] = useState(Number(window.localStorage.getItem('storePage')) || 1)
   const [pageSize, setSize] = useState(10)
   const [visible, setV] = useState(false)
   const [modalData, setModal] = useState([])
@@ -66,6 +66,7 @@ const StoreData = ({ dispatch, storeData: { total, list } }) => {
 
   const handleTableChange = pagination => {
     setCur(pagination.current)
+    window.localStorage.setItem('storePage', pagination.current)
   }
   const pagination = {
     total, pageSize, current,
@@ -75,6 +76,7 @@ const StoreData = ({ dispatch, storeData: { total, list } }) => {
   }
   const handleSearch = () => {
     setCur(1)
+    window.localStorage.setItem('storePage', 1)
   }
   return (
     <div>

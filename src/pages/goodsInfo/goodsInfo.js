@@ -7,7 +7,7 @@ import { delGoods, switchHot } from '@/services/common';
 
 
 const GoodsInfo = ({ dispatch, goods: { total, list } }) => {
-  const [current, setCur] = useState(1)
+  const [current, setCur] = useState(Number(window.localStorage.getItem('goodsPage')) || 1)
   const [pageSize, setSize] = useState(10)
   const [shoeName, setShoeName] = useState('')
   const columns = [
@@ -69,7 +69,6 @@ const GoodsInfo = ({ dispatch, goods: { total, list } }) => {
       }
     })
   }
-
   const onDelGoods = shoeNum => {
     delGoods(shoeNum).then(r => {
       if (r.code === 0) {
@@ -83,6 +82,7 @@ const GoodsInfo = ({ dispatch, goods: { total, list } }) => {
   }, [current, shoeName])
   const handleTableChange = pagination => {
     setCur(pagination.current)
+    window.localStorage.setItem('goodsPage', pagination.current)
   }
   const pagination = {
     total, pageSize, current,
@@ -92,6 +92,7 @@ const GoodsInfo = ({ dispatch, goods: { total, list } }) => {
   }
   const handleSearch = () => {
     setCur(1)
+    window.localStorage.setItem('goodsPage', 1)
   }
   return (
     <div>

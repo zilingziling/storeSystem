@@ -7,7 +7,7 @@ import { delUser } from '@/services/common';
 
 
 const UserInfo = ({ dispatch, user: { total, list } }) => {
-  const [current, setCur] = useState(1)
+  const [current, setCur] = useState(Number(window.localStorage.getItem('userPage')) || 1)
   const [pageSize, setSize] = useState(10)
   const [userName, setUserName] = useState('')
   const columns = [
@@ -65,6 +65,7 @@ const UserInfo = ({ dispatch, user: { total, list } }) => {
   }, [current, userName])
   const handleTableChange = pagination => {
     setCur(pagination.current)
+    window.localStorage.setItem('userPage', pagination.current)
   }
   const onDelUser = id => {
     delUser(id).then(r => {
@@ -82,6 +83,7 @@ const UserInfo = ({ dispatch, user: { total, list } }) => {
   }
   const handleSearch = () => {
     setCur(1)
+    window.localStorage.setItem('userPage', 1)
   }
   return (
     <div>
